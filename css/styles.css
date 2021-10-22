@@ -223,7 +223,7 @@ section.your-active-class .landing__container::after {
 
 
 .navbar__menu .active-link {
-    background: #26dff7;
+    background: #ad3f3f;
     color: rgb(255, 255, 255);
     transition: ease 0.3s all;
 }
