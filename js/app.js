@@ -1,43 +1,112 @@
-var Sections = Array.from(document.querySelectorAll('section'));
-var ListItem = document.getElementById("navbar__list");
+/**
+ *
+ * Manipulating the DOM exercise.
+ * Exercise programmatically builds navigation,
+ * scrolls to anchors from navigation,
+ * and highlights section in viewport upon scrolling.
+ *
+ * Dependencies: None
+ *
+ * JS Version: ES2015/ES6
+ *
+ * JS Standard: ESlint
+ *
+ */
 
-// creat a lits item in Html file
-function CreateListItem() {
-    for (section of Sections){
-        NameItem = section.getAttribute("data-nav");
-        LinkSection = section.getAttribute("id");
-        fItem = document.createElement("li");
-        fItem.innerHTML = `<a class='menu__link' href='#${LinkSection}' data-nav='${LinkSection}'>${NameItem}</a>`; // creating link in list item
-        ListItem.appendChild(fItem);
-    }
+/**
+ * Define Global Variables
+ *
+ */
+const sectionsElements = document.querySelectorAll('section');
+var navbarUl = document.getElementById('navbar__list');
+var navList = '';
+/**
+ * End Global Variables
+ * Start Helper Functions
+ 
+ *
+ */
+// Generate navbar from sections id names we got from the querySelectorAll
+function gernerateNavbar() {
+  sectionsElements.forEach((section) => {
+    // add html tags for list items
+    navList += `<li> <a class="nav__link menu__link" href="#${section.id}" id="navli">
+          ${section.dataset.nav}</a></li>`;
+  });
+  // add the tags to the inner htmls
+  navbarUl.innerHTML = navList;
 }
-// this function is adding a style states to the navbar items
-window.onscroll = function() {
-	document.querySelectorAll("section").forEach(function(activeItem) {
-  var activeLink = ListItem.querySelector(`[data-nav=${activeItem.id}]`);
-  // geting and check the area of the section
-	if(activeItem.getBoundingClientRect().top >= -400 && activeItem.getBoundingClientRect().top <= 150){
+gernerateNavbar();
 
-    activeItem.classList.add("your-active-class");
-    activeLink.classList.add("active-link");
+// Add class 'active' to section when near top of viewport (Eye level )
 
+function addActiveClass(section) {
+  // get the id from the section
+  const id = section.getAttribute('id');
+
+  // add the active class to the section
+  document.querySelector(`#${id}`).classList.add('your-active-class');
+}
+
+//Removing the active class from the section
+function removeActiveClass(section) {
+  const id = section.getAttribute('id');
+  document.querySelector(`#${id}`).classList.remove('your-active-class');
+}
+
+// calcualting when the section is active
+function makeActiveSection() {
+  sectionsElements.forEach((section) => {
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
+
+    let elementOffset = section.getBoundingClientRect();
+    if (elementOffset.top <= 150 && elementOffset.bottom >= 150) {
+      addActiveClass(section);
     } else {
-      activeItem.classList.remove("your-active-class");
-      activeLink.classList.remove("active-link");
+      removeActiveClass(section);
     }
-	});
+  });
 }
+// event listener to the dom itself so
+document.addEventListener('scroll', makeActiveSection);
 
-// this code make the page smooth
-ListItem.addEventListener("click", (event) => {
-  event.preventDefault();
-  if (event.target.dataset.nav) {
-    document
-      .getElementById(`${event.target.dataset.nav}`)
-      .scrollIntoView({ behavior: "smooth" });
-    setTimeout(() => {
-      location.hash = `${event.target.dataset.nav}`;
-    }, 200);
-  }
+// get a button to scroll back to top of the page
+//https://www.w3schools.com/howto/howto_js_scroll_to_top.asp
+
+var navbar = document.getElementById('navbar').querySelectorAll('li');
+
+// itrate in li items list
+navbar.forEach((item) => {
+  item.addEventListener('click', function (e) {
+    navbar.forEach((item) => {
+      // remove every navbarclick class added befoe in any list item
+      item.classList.remove('navbarclick');
+    });
+    // add the class on the button
+    item.classList.add('navbarclick');
+  });
 });
-CreateListItem();
+
+/**
+ * End Helper Functions
+ * Begin Main Functions
+ *
+*/
+
+// build the nav
+
+// Add class 'active' to section when near top of viewport
+
+// Scroll to anchor ID using scrollTO event
+
+/**
+ * End Main Functions
+ * Begin Events
+ *
+*/
+
+// Build menu
+
+// Scroll to section on link click
+
+// Set sections as active
